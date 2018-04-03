@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.CommentMapper">
+    <insert id="newComment" parameterType="Comment">
+        INSERT INTO Comment (id,context,time,user)
+        VALUES (#{id},#{context},,#{time}，#{user})
+    </insert>
+    <delete id="delCommentById" >
+        DELETE FROM Blog WHERE id = #{id}
+    </delete>
+    <update id="updateComment" parameterType="String">
+        UPDATE Blog SET context = #{context},time= #{time},user =#{user}
+         WHERE id = #{id}
+    </update>
+    <select id="queryCommentById" parameterType="String" resultType="Comment">
+        SELECT * FROM Comment WHERE id = #{id}
+    </select>
+    <select id="queryCommentByUserId" parameterType="String" resultType="java.util.List">
+        SELECT id, context,time,user
+    FROM id = #{id}
+    </select>
+
+</mapper>

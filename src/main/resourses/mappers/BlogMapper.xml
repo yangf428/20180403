@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.BlogMapper">
+    <!--对应接口名-->
+
+
+    <resultMap id="CommentResult" type="Comment">
+        <id property="id" column="comment_id"/>
+        <result property="context" column="context2"/>
+        <result property="time" column="time"/>
+        <result property="user.id" column="user_id2"/>
+        <result property="blog.id" column="blog_id"/>
+    </resultMap>
+    <resultMap id="BlogResult" type="blog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="date" column="date"/>
+        <result property="author.id" column="user_id"/>
+        <collection property="commentList" resultMap="commentResult"/>
+    </resultMap>
+
+    <!--方法名为配置文件中id值；方法参数类型为parameterType对应值；方法返回值类型为returnType对应值。-->
+    <insert id="newBlog" parameterType="Blog">
+        INSERT INTO Blog (id,title,context,date)
+        VALUES (#{id},#{title},#{context},#{date})
+    </insert>
+    <delete id="delBlog" parameterType="String">
+        DELETE FROM Blog WHERE id = #{id}
+    </delete>
+    <update id="updateBlog" parameterType="Blog">
+        UPDATE Blog SET title = #{title},context = #{context},date = #{date},author =#{author}
+         WHERE id = #{id}
+    </update>
+    <select id="queryBlogById" parameterType="String" resultType="Blog">
+        SELECT * FROM Blog WHERE id = #{id}
+    </select>
+    <select id="listAllBlog" resultMap="BlogResult">
+        SELECT blog.id,blog.title,blog.context,blog.date,blog.user_id,
+        comment.user_id AS user_id2,comment.context AS context2,comment.time ,comment.id AS comment_id,comment.blog_id
+        from blog LEFT JOIN comment ON comment.blog_id=blog.id
+    </select>
+    <select id="queryBlogByTitle" parameterType="java.lang.String" resultMap="BlogResult">
+        SELECT blog.id,blog.title,blog.context,blog.date,blog.user_id,
+         comment.user_id AS user_id2,comment.context AS context2,comment.time ,comment.id AS comment_id,comment.blog_id
+        from blog LEFT JOIN comment ON comment.blog_id=blog.id WHERE title=#{title}
+    </select>
+
+</mapper>
